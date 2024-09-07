@@ -4,7 +4,7 @@ Este proyecto es una API REST desarrollada con Spring Boot.
 
 ## Descripción
 
-La plataforma Aventurape es una API REST diseñada para [descripción breve de lo que hace tu proyecto].
+La plataforma Aventurape es una API REST diseñada para la aplicacion movil AventuraPe.
 
 ## Dependencias
 
