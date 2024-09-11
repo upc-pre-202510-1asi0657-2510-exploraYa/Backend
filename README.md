@@ -6,6 +6,20 @@ Este proyecto es una API REST desarrollada con Spring Boot.
 
 La plataforma Aventurape es una API REST diseñada para la aplicacion movil AventuraPe.
 
+## Features
+
+- RESTful API
+- OpenAPI Documentation
+- Swagger UI
+- ASP.NET Framework
+- Entity Framework Core
+- Audit Creation and Update Date
+- Custom Route Naming Conventions
+- Custom Object-Relational Mapping Naming Conventions
+- MySQL Database
+- Domain-Driven Design
+
+
 ## Dependencias
 
 - **Spring Data JPA**: Para la persistencia de datos en tiendas SQL utilizando la API de persistencia de Java con Spring Data y Hibernate.
