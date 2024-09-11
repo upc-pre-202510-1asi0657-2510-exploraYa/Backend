@@ -28,3 +28,6 @@ Para poder ejecutar el proyecto es necesario tener instalado:
 1. Clona el repositorio:
    ```bash
    git clone https://github.com/AventuraPe-AndroidSoftware/AventuraPe_Backend.git
+
+
+   .
