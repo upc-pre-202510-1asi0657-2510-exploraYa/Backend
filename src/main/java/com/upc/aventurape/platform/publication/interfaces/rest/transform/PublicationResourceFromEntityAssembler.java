@@ -8,7 +8,7 @@ public class PublicationResourceFromEntityAssembler {
 
     public static PublicationResource toResourceFromEntity(Publication entity) {
         return new PublicationResource(
-                entity.getId(),
+               entity.getId(),
                 entity.getNameActivity(),
                 entity.getDescription(),
                 entity.getTimeDuration(),

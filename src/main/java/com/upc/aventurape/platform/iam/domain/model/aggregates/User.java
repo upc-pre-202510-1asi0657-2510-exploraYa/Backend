@@ -1,6 +1,7 @@
 package com.upc.aventurape.platform.iam.domain.model.aggregates;
 
-import com.upc.aventurape.platform.shared.domain.model.agregates.AuditableAbstractAggregateRoot;
+
+import com.upc.aventurape.platform.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

@@ -1,13 +1,18 @@
 package com.upc.aventurape.platform.publication.domain.model.aggregates;
 
-import com.upc.aventurape.platform.shared.domain.model.agregates.AuditableAbstractAggregateRoot;
+import com.upc.aventurape.platform.publication.domain.model.entities.Adventure;
+import com.upc.aventurape.platform.publication.domain.model.entities.Comment;
+import com.upc.aventurape.platform.publication.domain.model.valueobjects.CommentManager;
+import com.upc.aventurape.platform.publication.domain.model.valueobjects.EntrepreneurId;
+
+import com.upc.aventurape.platform.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.imageio.stream.ImageInputStream;
-import java.awt.*;
+import java.util.List;
+
 import jakarta.validation.constraints.Size;
 
 @Setter
@@ -19,42 +24,79 @@ public class Publication extends AuditableAbstractAggregateRoot<Publication> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    @NotNull
-    @Size(max = 50)
-    private String nameActivity;
+    private Double rating;
 
-    @Column(nullable = false)
-    @NotNull
-    @Size(max = 50)
-    private String description;
+    @Embedded
+    private EntrepreneurId entrepreneurId;
 
-    @Column(nullable = false)
-    @NotNull
-    private Integer timeDuration;
+    @OneToOne(mappedBy = "publication", cascade = CascadeType.ALL)
+    private Adventure adventure;
+
+    @OneToMany(mappedBy = "publication", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Comment> comments;
+
+    @Embedded
+    private CommentManager commentManager;
+
 
     @Column(nullable = false)
     @NotNull
     @Size(max = 50)
     private String image;
 
-    @Column(nullable = false)
-    @NotNull
-    private Integer cantPeople;
+
 
     @Column(nullable = false)
     @NotNull
     private Integer cost;
 
     public Publication() {
+        this.entrepreneurId = new EntrepreneurId();
+        this.commentManager = new CommentManager();
+        this.image = "";
+        this.cost = 0;
     }
 
-    public Publication(String nameActivity, String description, Integer timeDuration, String image, Integer cantPeople, Integer cost) {
-        this.nameActivity = nameActivity;
-        this.description = description;
-        this.timeDuration = timeDuration;
-        this.image = image;
-        this.cantPeople = cantPeople;
+    public Publication(Integer cost, EntrepreneurId entrepreneurId,
+                       Adventure adventure, String image, Integer TimeDuration,
+                       Integer cantPeople) {
         this.cost = cost;
+        this.entrepreneurId = entrepreneurId;
+        this.adventure = adventure;
+        this.adventure.setPublication(this);
+        this.commentManager = new CommentManager();
+        this.image = image;
+        this.rating = 0.0;
+
+    }
+
+    public void updateCost(Integer cost) {
+        this.cost = cost;
+    }
+
+    public void updateEntrepreneurId(EntrepreneurId entrepreneurId) {
+        this.entrepreneurId = entrepreneurId;
+    }
+
+
+    public void calculateRating() {
+        double calculatedRating = commentManager.calculateRating(comments);
+        this.rating =calculatedRating;
+    }
+
+    public String getNameActivity() {
+        return adventure.getNameActivity();
+    }
+
+    public String getDescription() {
+        return adventure.getDescription();
+    }
+
+    public Integer getTimeDuration() {
+        return adventure.getTimeDuration();
+    }
+
+    public Integer getCantPeople() {
+        return adventure.getCantPeople();
     }
 }
