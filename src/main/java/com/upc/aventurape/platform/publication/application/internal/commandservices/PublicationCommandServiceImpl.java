@@ -49,6 +49,7 @@ public class PublicationCommandServiceImpl  implements PublicationCommandService
         if (!publicationRepository.existsById(command.publicationId())) {
             throw new IllegalArgumentException("Publication does not exist");
         }
+        publicationRepository.deleteById(command.publicationId());
     }
 
     @Override
