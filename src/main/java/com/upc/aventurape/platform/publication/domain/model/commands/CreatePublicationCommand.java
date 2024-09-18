@@ -1,7 +1,7 @@
 package com.upc.aventurape.platform.publication.domain.model.commands;
 
 public record CreatePublicationCommand(
-        Long userId,
+        Long entrepreneurId,
         String  nameActivity,
         String  description,
         Integer  timeDuration,
@@ -9,4 +9,5 @@ public record CreatePublicationCommand(
         Integer cantPeople,
         Integer cost
 ) {
+
 }

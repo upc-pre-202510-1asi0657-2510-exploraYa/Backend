@@ -18,13 +18,13 @@ public class OpenApiConfiguration {
     var openApi = new OpenAPI();
     openApi
         .info(new Info()
-            .title("Event Wear Platform API")
-            .description("Event Wear Platform application REST API documentation.")
+            .title("AdventuratePe Platform API")
+            .description("AdventuratePe Platform application REST API documentation.")
             .version("v1.0.0")
             .license(new License().name("Apache 2.0")
                 .url("https://springdoc.org")))
         .externalDocs(new ExternalDocumentation()
-            .description("Event Wear Platform wiki Documentation")
+            .description("AdventuratePe Platform wiki Documentation")
             .url("https/event-wear-platform.com/docs"));
 
     // Add security scheme

@@ -7,7 +7,7 @@ public class CreatePublicationCommandFromResourceAssembler {
 
     public static CreatePublicationCommand toCommandFromResource(CreatePublicationResource resource) {
         return new CreatePublicationCommand(
-                resource.EntrepreneurId(),
+                resource.entrepreneurId(),
                 resource.nameActivity(),
                 resource.description(),
                 resource.timeDuration(),

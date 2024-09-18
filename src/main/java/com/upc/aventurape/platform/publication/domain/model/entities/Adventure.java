@@ -27,10 +27,6 @@ public class Adventure extends AuditableModel {
     @Size(max = 50)
     private String description;
 
-    @OneToOne
-    @JoinColumn(name = "publication_id")
-    private Publication publication;
-
     @Column(nullable = false)
     @NotNull
     private Integer cantPeople;
@@ -38,6 +34,12 @@ public class Adventure extends AuditableModel {
     @Column(nullable = false)
     @NotNull
     private Integer timeDuration;
+
+
+    @OneToOne
+    @JoinColumn(name = "publication_id")
+    private Publication publication;
+
 
     public Adventure() {
         this.nameActivity = "";
@@ -49,8 +51,28 @@ public class Adventure extends AuditableModel {
     public Adventure(String nameActivity, String description, Integer cantPeople, Integer timeDuration) {
         this.nameActivity = nameActivity;
         this.description = description;
-        this.cantPeople = 0;
-        this.timeDuration = 0;
+        this.cantPeople = cantPeople;
+        this.timeDuration = timeDuration;
+    }
+
+    public void setPublication(Publication publication) {
+        this.publication = publication;
+    }
+
+    public void setNameActivity(String nameActivity) {
+        this.nameActivity = nameActivity;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setCantPeople(Integer cantPeople) {
+        this.cantPeople = cantPeople;
+    }
+
+    public void setTimeDuration(Integer timeDuration) {
+        this.timeDuration = timeDuration;
     }
 
 

@@ -1,5 +1,6 @@
 package com.upc.aventurape.platform.publication.domain.model.valueobjects;
 
+import com.upc.aventurape.platform.publication.domain.model.entities.Adventure;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
