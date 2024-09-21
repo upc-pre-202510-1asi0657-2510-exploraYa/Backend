@@ -21,8 +21,9 @@ public class ProfileEntrepreneurCommandServiceImpl implements ProfileEntrepreneu
     @Override
     public Optional<ProfileEntrepreneur> handle(CreateProfileEntrepreneurCommand command) {
         var emailAddress = new EmailAddress(command.email());
-        if(profileRepository.existsEntrepreneurByEmail(emailAddress.address())) {
-            throw new IllegalArgumentException("Profile with email "+ command.email() +"already exists");
+        Boolean exists = profileRepository.existsEntrepreneurByEmail(emailAddress.address());
+        if (Boolean.TRUE.equals(exists)) {
+            throw new IllegalArgumentException("Profile with email " + command.email() + " already exists");
         }
         var profileEntrepreneur = new ProfileEntrepreneur(command);
         profileRepository.save(profileEntrepreneur);

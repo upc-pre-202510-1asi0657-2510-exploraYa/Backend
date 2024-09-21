@@ -13,15 +13,17 @@ import java.util.Optional;
 public class ProfileAdventurerCommandServiceImpl implements ProfileAdventureCommandService {
     private final ProfileRepository profileRepository;
 
-    public ProfileAdventurerCommandServiceImpl(ProfileRepository profileRepository, ProfileRepository profileRepository1) {
-        this.profileRepository = profileRepository1;
+    public ProfileAdventurerCommandServiceImpl(ProfileRepository profileRepository) {
+        this.profileRepository = profileRepository;
     }
 
     @Override
     public Optional<ProfileAdventurer> handle(CreateProfileAdventurerCommand command) {
         var emailAddress = new EmailAddress(command.email());
-        if(profileRepository.existsAdventurerByEmail(emailAddress.address()))
-            throw new IllegalArgumentException("Profile with email "+ command.email() +"already exists");
+        Boolean exists = profileRepository.existsAdventurerByEmail(emailAddress.address());
+        if (Boolean.TRUE.equals(exists)) {
+            throw new IllegalArgumentException("Profile with email " + command.email() + " already exists");
+        }
         var profileAdventurer = new ProfileAdventurer(command);
         profileRepository.save(profileAdventurer);
         return Optional.of(profileAdventurer);
