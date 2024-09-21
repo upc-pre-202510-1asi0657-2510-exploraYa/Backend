@@ -1,14 +1,25 @@
 package com.upc.aventurape.platform.profiles.interfaces.rest;
 
-import com.upc.aventurape.platform.profiles.domain.model.queries.*;
-import com.upc.aventurape.platform.profiles.domain.services.ProfileCommandService;
-import com.upc.aventurape.platform.profiles.domain.services.ProfileQueryService;
-import com.upc.aventurape.platform.profiles.interfaces.rest.resources.CreateProfileResource;
-import com.upc.aventurape.platform.profiles.interfaces.rest.resources.ProfileResource;
-import com.upc.aventurape.platform.profiles.interfaces.rest.resources.UpdateProfileResource;
-import com.upc.aventurape.platform.profiles.interfaces.rest.transform.CreateProfileCommandFromResourceAssembler;
-import com.upc.aventurape.platform.profiles.interfaces.rest.transform.ProfileResourceFromEntityAssembler;
-import com.upc.aventurape.platform.profiles.interfaces.rest.transform.UpdateProfileCommandFromResourceAssembler;
+import com.upc.aventurape.platform.profiles.domain.model.aggregates.ProfileAdventurer;
+import com.upc.aventurape.platform.profiles.domain.model.aggregates.ProfileEntrepreneur;
+import com.upc.aventurape.platform.profiles.domain.model.commands.CreateProfileAdventurerCommand;
+import com.upc.aventurape.platform.profiles.domain.model.commands.CreateProfileEntrepreneurCommand;
+import com.upc.aventurape.platform.profiles.domain.model.queries.GetAllProfilesAdventurerQuery;
+import com.upc.aventurape.platform.profiles.domain.model.queries.GetAllProfilesEntrepreneurQuery;
+import com.upc.aventurape.platform.profiles.domain.model.queries.GetProfileAdventurerByIdQuery;
+import com.upc.aventurape.platform.profiles.domain.model.queries.GetProfileEntrepreneurByIdQuery;
+import com.upc.aventurape.platform.profiles.domain.services.ProfileAdventureCommandService;
+import com.upc.aventurape.platform.profiles.domain.services.ProfileAdventureQueryService;
+import com.upc.aventurape.platform.profiles.domain.services.ProfileEntrepreneurCommandService;
+import com.upc.aventurape.platform.profiles.domain.services.ProfileEntrepreneurQueryService;
+import com.upc.aventurape.platform.profiles.interfaces.rest.resources.CreateProfileAdventurerResource;
+import com.upc.aventurape.platform.profiles.interfaces.rest.resources.CreateProfileEntrepreneurResource;
+import com.upc.aventurape.platform.profiles.interfaces.rest.resources.ProfileAdventurerResource;
+import com.upc.aventurape.platform.profiles.interfaces.rest.resources.ProfileEntrepreneurResource;
+import com.upc.aventurape.platform.profiles.interfaces.rest.transform.CreateProfileAdventurerCommandFromResourceAssembler;
+import com.upc.aventurape.platform.profiles.interfaces.rest.transform.CreateProfileEntrepreneurCommandFromResourceAssembler;
+import com.upc.aventurape.platform.profiles.interfaces.rest.transform.ProfileAdventurerResourceFromEntityAssembler;
+import com.upc.aventurape.platform.profiles.interfaces.rest.transform.ProfileEntrepreneurResourceFromEntityAssembler;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,95 +27,78 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/v1/profiles", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Profiles", description = "Profile Management Endpoints")
+
 public class ProfilesController {
-    private final ProfileQueryService profileQueryService;
-    private final ProfileCommandService profileCommandService;
 
-    public ProfilesController(ProfileQueryService profileQueryService,
-                              ProfileCommandService profileCommandService) {
+    private final ProfileAdventureCommandService profileAdventureCommandService;
+    private final ProfileEntrepreneurCommandService profileEntrepreneurCommandService;
+    private final ProfileAdventureQueryService profileAdventureQueryService;
+    private final ProfileEntrepreneurQueryService profileEntrepreneurQueryService;
 
-        this.profileQueryService = profileQueryService;
-        this.profileCommandService = profileCommandService;
+    public ProfilesController(ProfileAdventureCommandService profileAdventureCommandService, ProfileEntrepreneurCommandService profileEntrepreneurCommandService,ProfileAdventureQueryService profileAdventureQueryService, ProfileEntrepreneurQueryService profileEntrepreneurQueryService ) {
+        this.profileAdventureCommandService = profileAdventureCommandService;
+        this.profileEntrepreneurCommandService = profileEntrepreneurCommandService;
+        this.profileAdventureQueryService = profileAdventureQueryService;
+        this.profileEntrepreneurQueryService = profileEntrepreneurQueryService;
     }
 
-    @PostMapping
-    public ResponseEntity<ProfileResource> createProfile(
-        @RequestBody CreateProfileResource resource) {
-
-        var createProfileCommand = CreateProfileCommandFromResourceAssembler
-            .toCommandFromResource(resource);
-        var profile = profileCommandService.handle(createProfileCommand);
-        if (profile.isEmpty())
-            return ResponseEntity.badRequest().build();
-        var profileResource = ProfileResourceFromEntityAssembler.toResourceFromEntity(profile.get());
-        return new ResponseEntity<>(profileResource, HttpStatus.CREATED);
+    @PostMapping("/adventurer")
+    public ResponseEntity<ProfileAdventurerResource> createProfileAdventurer(@RequestBody CreateProfileAdventurerResource createProfileAdventurerResource) {
+        var createProfileCommand = CreateProfileAdventurerCommandFromResourceAssembler.toCommandFromResource( createProfileAdventurerResource );
+        var profileAdventurer = profileAdventureCommandService.handle( createProfileCommand );
+        if (profileAdventurer.isEmpty()) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        var profileAdventurerResource = ProfileAdventurerResourceFromEntityAssembler.toResourceFromEntity( profileAdventurer.get() );
+        return new ResponseEntity<>(profileAdventurerResource, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{profileId}")
-    public ResponseEntity<ProfileResource> updateProfile(
-        @PathVariable Long profileId,
-        @RequestBody UpdateProfileResource updateProfileResource) {
-        var updateProfileCommand = UpdateProfileCommandFromResourceAssembler
-                .toCommandFromResource(profileId, updateProfileResource);
-        var profile = profileCommandService.handle(updateProfileCommand);
-        if (profile.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
-        var profileResource = ProfileResourceFromEntityAssembler.toResourceFromEntity(profile.get());
-        return ResponseEntity.ok(profileResource);
+    @PostMapping("/entrepreneur")
+    public ResponseEntity<ProfileEntrepreneurResource> createProfileEntrepreneur(@RequestBody CreateProfileEntrepreneurResource createProfileEntrepreneurResource) {
+        var createProfileCommand = CreateProfileEntrepreneurCommandFromResourceAssembler.toCommandFromResource( createProfileEntrepreneurResource );
+        var profileEntrepreneur = profileEntrepreneurCommandService.handle( createProfileCommand );
+        if(profileEntrepreneur.isEmpty()) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        var profileEntrepreneurResource = ProfileEntrepreneurResourceFromEntityAssembler.toResourceFromEntity(profileEntrepreneur.get());
+        return new ResponseEntity<>(profileEntrepreneurResource, HttpStatus.CREATED);
     }
 
-    @GetMapping("/id/{profileId}")
-    public ResponseEntity<ProfileResource> getProfileById(@PathVariable Long profileId) {
-        var getProfileByIdQuery = new GetProfileByIdQuery(profileId);
-        var profile = profileQueryService.handle(getProfileByIdQuery);
-        if (profile.isEmpty())
-            return ResponseEntity.badRequest().build();
-        var profileResource = ProfileResourceFromEntityAssembler.toResourceFromEntity(profile.get());
-        return ResponseEntity.ok(profileResource);
+    @GetMapping("/adventurer/{profileId}")
+    public ResponseEntity<ProfileAdventurerResource> getProfileAdventurerById(@PathVariable Long profileId) {
+        var getProfileByIdQuery = new GetProfileAdventurerByIdQuery(profileId);
+        var profileAdventurer = profileAdventureQueryService.handle(getProfileByIdQuery);
+        if(profileAdventurer.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        var profileAdventurerResource = ProfileAdventurerResourceFromEntityAssembler.toResourceFromEntity( profileAdventurer.get() );
+        return new ResponseEntity<>(profileAdventurerResource, HttpStatus.OK);
     }
 
-    @GetMapping("/name/{name}")
-    public ResponseEntity<ProfileResource> getProfileByName(@PathVariable String name) {
-        var getProfileByNameQuery = new GetProfileByNameQuery(name);
-        var profile = profileQueryService.handle(getProfileByNameQuery);
-        if (profile.isEmpty())
-            return ResponseEntity.badRequest().build();
-        var profileResource = ProfileResourceFromEntityAssembler.toResourceFromEntity(profile.get());
-        return ResponseEntity.ok(profileResource);
+    @GetMapping("/entrepreneur/{profileId}")
+    public ResponseEntity<ProfileEntrepreneurResource> getProfileEntrepreneurById(@PathVariable Long profileId) {
+        var getProfileByIdQuery = new GetProfileEntrepreneurByIdQuery(profileId);
+        var profileAdventurer = profileEntrepreneurQueryService.handle(getProfileByIdQuery);
+        if(profileAdventurer.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        var profileEntrepreneurResource = ProfileEntrepreneurResourceFromEntityAssembler.toResourceFromEntity( profileAdventurer.get() );
+        return new ResponseEntity<>(profileEntrepreneurResource, HttpStatus.OK);
     }
 
-    @GetMapping("/category/{category}")
-    public ResponseEntity<List<ProfileResource>> getProfilesByCategory(@PathVariable String category) {
-        var getProfilesByCategoryQuery = new GetProfileByCategoryQuery(category);
-        var profiles = profileQueryService.handle(getProfilesByCategoryQuery);
-        var profileResources = profiles.stream()
-                .map(ProfileResourceFromEntityAssembler::toResourceFromEntity)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(profileResources);
+    @GetMapping("/adventurer")
+    public ResponseEntity<List<ProfileAdventurerResource>> getAllProfileAdventurers() {
+        var getAllProfilesAdventurerQuery = new GetAllProfilesAdventurerQuery();
+        var profilesAdventurer = profileAdventureQueryService.handle(getAllProfilesAdventurerQuery);
+        var profileResources = profilesAdventurer.stream()
+                .map(ProfileAdventurerResourceFromEntityAssembler::toResourceFromEntity)
+                .toList();
+        return new ResponseEntity<>(profileResources, HttpStatus.OK);
     }
 
-    @GetMapping("/location/{location}")
-    public ResponseEntity<List<ProfileResource>> getProfilesByLocation(@PathVariable String location) {
-        var getProfilesByLocationQuery = new GetProfileByLocationQuery(location);
-        var profiles = profileQueryService.handle(getProfilesByLocationQuery);
-        var profileResources = profiles.stream()
-                .map(ProfileResourceFromEntityAssembler::toResourceFromEntity)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(profileResources);
-    }
-
-    @GetMapping
-    public ResponseEntity<List<ProfileResource>> getAllProfiles() {
-        var profiles = profileQueryService.handle(new GetAllProfilesQuery());
-        var profileResources = profiles.stream()
-            .map(ProfileResourceFromEntityAssembler::toResourceFromEntity)
-            .collect(Collectors.toList());
+    @GetMapping("/entrepreneur")
+    public ResponseEntity<List<ProfileEntrepreneurResource>> getAllProfileEntrepreneurs() {
+        var getAllProfilesEntrepreneurQuery = new GetAllProfilesEntrepreneurQuery();
+        var profilesEntrepreneur = profileEntrepreneurQueryService.handle(getAllProfilesEntrepreneurQuery);
+        var profileResources = profilesEntrepreneur.stream()
+                .map(ProfileEntrepreneurResourceFromEntityAssembler::toResourceFromEntity)
+                .toList();
         return new ResponseEntity<>(profileResources, HttpStatus.OK);
     }
 }
