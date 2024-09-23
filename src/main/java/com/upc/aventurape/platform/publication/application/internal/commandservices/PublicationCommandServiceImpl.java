@@ -23,7 +23,7 @@ public class PublicationCommandServiceImpl  implements PublicationCommandService
 
       @Override
       public Publication handle(CreatePublicationCommand command) {
-            var adventure = new Adventure(  command.nameActivity(), command.description(), command.timeDuration(), command.cantPeople());
+            var adventure = new Adventure(  command.nameActivity(), command.description(), command.cantPeople(), command.timeDuration());
             var publication = new Publication(new EntrepreneurId(command.entrepreneurId()), adventure, command.cost(),command.image());
             publicationRepository.save(publication);
             return publication;
