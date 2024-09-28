@@ -41,7 +41,7 @@ public class Publication extends AuditableAbstractAggregateRoot<Publication> {
 
     @Column(nullable = false)
     @NotNull
-    @Size(max = 50)
+    @Size(max = 1000)
     private String image;
 
 
