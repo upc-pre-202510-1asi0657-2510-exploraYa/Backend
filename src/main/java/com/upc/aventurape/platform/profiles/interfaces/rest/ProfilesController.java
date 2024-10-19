@@ -1,5 +1,6 @@
 package com.upc.aventurape.platform.profiles.interfaces.rest;
 
+import com.upc.aventurape.platform.iam.infrastructure.security.SecurityUtils;
 import com.upc.aventurape.platform.profiles.domain.model.aggregates.ProfileAdventurer;
 import com.upc.aventurape.platform.profiles.domain.model.aggregates.ProfileEntrepreneur;
 import com.upc.aventurape.platform.profiles.domain.model.commands.CreateProfileAdventurerCommand;
@@ -27,6 +28,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/api/v1/profiles", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -48,18 +50,21 @@ public class ProfilesController {
 
     @PostMapping("/adventurer")
     public ResponseEntity<ProfileAdventurerResource> createProfileAdventurer(@RequestBody CreateProfileAdventurerResource createProfileAdventurerResource) {
-        var createProfileCommand = CreateProfileAdventurerCommandFromResourceAssembler.toCommandFromResource( createProfileAdventurerResource );
-        var profileAdventurer = profileAdventureCommandService.handle( createProfileCommand );
-        if (profileAdventurer.isEmpty()) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        var profileAdventurerResource = ProfileAdventurerResourceFromEntityAssembler.toResourceFromEntity( profileAdventurer.get() );
+        Long userId = SecurityUtils.getCurrentUserId();
+        var createProfileCommand = CreateProfileAdventurerCommandFromResourceAssembler.toCommandFromResource(createProfileAdventurerResource, userId);
+        var profileAdventurer = profileAdventureCommandService.handle(createProfileCommand);
+
+        var profileAdventurerResource = ProfileAdventurerResourceFromEntityAssembler.
+                toResourceFromEntity(profileAdventurer);
         return new ResponseEntity<>(profileAdventurerResource, HttpStatus.CREATED);
     }
 
+
     @PostMapping("/entrepreneur")
     public ResponseEntity<ProfileEntrepreneurResource> createProfileEntrepreneur(@RequestBody CreateProfileEntrepreneurResource createProfileEntrepreneurResource) {
-        var createProfileCommand = CreateProfileEntrepreneurCommandFromResourceAssembler.toCommandFromResource( createProfileEntrepreneurResource );
-        var profileEntrepreneur = profileEntrepreneurCommandService.handle( createProfileCommand );
-        if(profileEntrepreneur.isEmpty()) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        Long userId = SecurityUtils.getCurrentUserId();
+        var createProfileCommand = CreateProfileEntrepreneurCommandFromResourceAssembler.toCommandFromResource(createProfileEntrepreneurResource, userId);
+        var profileEntrepreneur = profileEntrepreneurCommandService.handle(createProfileCommand);
         var profileEntrepreneurResource = ProfileEntrepreneurResourceFromEntityAssembler.toResourceFromEntity(profileEntrepreneur.get());
         return new ResponseEntity<>(profileEntrepreneurResource, HttpStatus.CREATED);
     }

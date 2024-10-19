@@ -29,7 +29,7 @@ public class ProfilesContextFacade {
         this.profileAdventureQueryService = profileAdventureQueryService;
         this.profileEntrepreneurQueryService = profileEntrepreneurQueryService;
     }
-
+/*
     public Long createProfile(String firstName, String lastName, String email, String street, String number, String city, String postalCode, String country, String gender, String profileType) {
         if ("adventurer".equalsIgnoreCase(profileType)) {
             CreateProfileAdventurerCommand command = new CreateProfileAdventurerCommand(firstName, lastName, email, street, number, city, postalCode, country, gender);
@@ -56,5 +56,5 @@ public class ProfilesContextFacade {
         } else {
             throw new IllegalArgumentException("Invalid profile type: " + profileType);
         }
-    }
+    }*/
 }

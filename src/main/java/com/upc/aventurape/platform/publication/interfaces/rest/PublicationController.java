@@ -49,7 +49,8 @@ public class PublicationController {
         if (publication == null) {
             return ResponseEntity.badRequest().build();
         }
-        var publicationResource = PublicationResourceFromEntityAssembler.toResourceFromEntity(publication);
+        var publicationResource = PublicationResourceFromEntityAssembler.
+                toResourceFromEntity(publication);
         return new ResponseEntity<>(publicationResource, HttpStatus.CREATED);
     }
 

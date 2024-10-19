@@ -2,7 +2,6 @@ package com.upc.aventurape.platform.profiles.application.internal.commandservice
 
 import com.upc.aventurape.platform.profiles.domain.model.aggregates.ProfileEntrepreneur;
 import com.upc.aventurape.platform.profiles.domain.model.commands.CreateProfileEntrepreneurCommand;
-import com.upc.aventurape.platform.profiles.domain.model.valueobjects.EmailAddress;
 import com.upc.aventurape.platform.profiles.domain.services.ProfileEntrepreneurCommandService;
 import com.upc.aventurape.platform.profiles.infrastructure.persistence.jpa.repositories.ProfileRepository;
 import org.springframework.stereotype.Service;
@@ -20,13 +19,8 @@ public class ProfileEntrepreneurCommandServiceImpl implements ProfileEntrepreneu
 
     @Override
     public Optional<ProfileEntrepreneur> handle(CreateProfileEntrepreneurCommand command) {
-        var emailAddress = new EmailAddress(command.email());
-        Boolean exists = profileRepository.existsEntrepreneurByEmail(emailAddress.address());
-        if (Boolean.TRUE.equals(exists)) {
-            throw new IllegalArgumentException("Profile with email " + command.email() + " already exists");
-        }
-        var profileEntrepreneur = new ProfileEntrepreneur(command);
-        profileRepository.save(profileEntrepreneur);
-        return Optional.of(profileEntrepreneur);
+        var profile = new ProfileEntrepreneur(command);
+        profileRepository.save(profile);
+        return Optional.of(profile);
     }
 }

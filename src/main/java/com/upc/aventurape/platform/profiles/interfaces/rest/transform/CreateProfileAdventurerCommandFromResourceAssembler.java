@@ -4,8 +4,10 @@ import com.upc.aventurape.platform.profiles.domain.model.commands.CreateProfileA
 import com.upc.aventurape.platform.profiles.interfaces.rest.resources.CreateProfileAdventurerResource;
 
 public class CreateProfileAdventurerCommandFromResourceAssembler{
-    public static CreateProfileAdventurerCommand toCommandFromResource(CreateProfileAdventurerResource resource){
+    public static CreateProfileAdventurerCommand toCommandFromResource(
+            CreateProfileAdventurerResource resource, Long userId){
         return new CreateProfileAdventurerCommand(
+                userId,
                 resource.firstName(),
                 resource.lastName(),
                 resource.email(),

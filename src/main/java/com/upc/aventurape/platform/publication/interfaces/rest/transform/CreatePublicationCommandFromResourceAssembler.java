@@ -5,7 +5,8 @@ import com.upc.aventurape.platform.publication.domain.model.commands.CreatePubli
 import com.upc.aventurape.platform.publication.interfaces.rest.resources.CreatePublicationResource;
 
 public class CreatePublicationCommandFromResourceAssembler {
-    public static CreatePublicationCommand toCommandFromResource(CreatePublicationResource resource, Long entrepreneurId) {
+    public static CreatePublicationCommand toCommandFromResource(
+            CreatePublicationResource resource, Long entrepreneurId) {
         return new CreatePublicationCommand(
                 entrepreneurId,
                 resource.nameActivity(),
