@@ -6,4 +6,7 @@ public record GetPublicationByEntrepeneurIdQuery(
         Long entrepeneurId
 ) {
 
+    public EntrepreneurId entrepreneurId() {
+        return new EntrepreneurId(entrepeneurId);
+    }
 }

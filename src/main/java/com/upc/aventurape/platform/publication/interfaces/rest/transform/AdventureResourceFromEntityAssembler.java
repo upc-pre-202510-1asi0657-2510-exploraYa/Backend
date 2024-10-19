@@ -7,7 +7,7 @@ public class AdventureResourceFromEntityAssembler {
     public static AdventureResource toResourceFromEntity(Adventure adventure) {
         return new AdventureResource(
                 adventure. getNameActivity(),
-               adventure.getDescription(),
+                adventure.getDescription(),
                 adventure.getTimeDuration(),
                 adventure.getCantPeople()
         );

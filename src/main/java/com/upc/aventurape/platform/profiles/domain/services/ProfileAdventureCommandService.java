@@ -6,5 +6,6 @@ import com.upc.aventurape.platform.profiles.domain.model.commands.CreateProfileA
 import java.util.Optional;
 
 public interface ProfileAdventureCommandService {
-    Optional<ProfileAdventurer> handle(CreateProfileAdventurerCommand command);
+    //Optional<ProfileAdventurer> handle(CreateProfileAdventurerCommand command);
+    ProfileAdventurer handle(CreateProfileAdventurerCommand command);
 }

@@ -1,11 +1,10 @@
 package com.upc.aventurape.platform.publication.domain.model.commands;
 
 import com.upc.aventurape.platform.publication.domain.model.entities.Adventure;
-import com.upc.aventurape.platform.publication.domain.model.valueobjects.EntrepreneurId;
 
 public record UpdatePublicationCommand(
         Long publicationId,
-        EntrepreneurId entrepreneurId,
+        Long entrepreneurId,
         Adventure adventure,
         String  nameActivity,
         String  description,

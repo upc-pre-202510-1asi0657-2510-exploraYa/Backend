@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
 import com.upc.aventurape.platform.iam.domain.model.valueobjects.Roles;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @With
-public class Role {
+public class Role implements GrantedAuthority { //cambio "implements GrantedAuthority"
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -72,5 +73,10 @@ public class Role {
       return List.of(getDefaultRole());
     }
     return roles;
+  }
+//cambio
+  @Override
+  public String getAuthority() {
+    return name.name();
   }
 }

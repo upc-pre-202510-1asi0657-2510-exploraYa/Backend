@@ -41,7 +41,7 @@ public class Publication extends AuditableAbstractAggregateRoot<Publication> {
 
     @Column(nullable = false)
     @NotNull
-    @Size(max = 50)
+    @Size(max = 1000)
     private String image;
 
 
@@ -51,23 +51,21 @@ public class Publication extends AuditableAbstractAggregateRoot<Publication> {
     private Integer cost;
 
     public Publication() {
-        this.entrepreneurId = new EntrepreneurId();
+        this.adventure = new Adventure();
+        this.cost = 0;
         this.commentManager = new CommentManager();
         this.image = "";
-        this.cost = 0;
+        this.rating = 0.0;
     }
 
-    public Publication(Integer cost, EntrepreneurId entrepreneurId,
-                       Adventure adventure, String image, Integer TimeDuration,
-                       Integer cantPeople) {
-        this.cost = cost;
+    public Publication(EntrepreneurId entrepreneurId, Adventure adventure, Integer cost, String image) {
         this.entrepreneurId = entrepreneurId;
         this.adventure = adventure;
         this.adventure.setPublication(this);
-        this.commentManager = new CommentManager();
+        this.cost = cost;
         this.image = image;
+        this.commentManager = new CommentManager();
         this.rating = 0.0;
-
     }
 
     public void updateCost(Integer cost) {
@@ -84,19 +82,7 @@ public class Publication extends AuditableAbstractAggregateRoot<Publication> {
         this.rating =calculatedRating;
     }
 
-    public String getNameActivity() {
-        return adventure.getNameActivity();
-    }
-
-    public String getDescription() {
-        return adventure.getDescription();
-    }
-
-    public Integer getTimeDuration() {
-        return adventure.getTimeDuration();
-    }
-
-    public Integer getCantPeople() {
-        return adventure.getCantPeople();
+    public void addComment(Comment comment) {
+        comments.add(comment);
     }
 }

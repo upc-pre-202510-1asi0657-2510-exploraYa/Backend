@@ -1,5 +1,7 @@
+// src/main/java/com/upc/aventurape/platform/publication/interfaces/rest/PublicationController.java
 package com.upc.aventurape.platform.publication.interfaces.rest;
 
+import com.upc.aventurape.platform.iam.infrastructure.security.SecurityUtils;
 import com.upc.aventurape.platform.publication.domain.model.aggregates.Publication;
 import com.upc.aventurape.platform.publication.domain.model.commands.DeletePublicationCommand;
 import com.upc.aventurape.platform.publication.domain.model.queries.*;
@@ -15,6 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,14 +38,19 @@ public class PublicationController {
         this.publicationQueryService = publicationQueryService;
     }
 
+
+
     @PostMapping("/create-publication")
+    @PreAuthorize("!hasRole('ROLE_ADVENTUROUS')")
     public ResponseEntity<PublicationResource> createPublication(@RequestBody CreatePublicationResource resource) {
-        var createPublicationCommand = CreatePublicationCommandFromResourceAssembler.toCommandFromResource(resource);
+        Long entrepreneurId = SecurityUtils.getCurrentUserId();
+        var createPublicationCommand = CreatePublicationCommandFromResourceAssembler.toCommandFromResource(resource, entrepreneurId);
         var publication = publicationCommandService.handle(createPublicationCommand);
         if (publication == null) {
             return ResponseEntity.badRequest().build();
         }
-        var publicationResource = PublicationResourceFromEntityAssembler.toResourceFromEntity(publication);
+        var publicationResource = PublicationResourceFromEntityAssembler.
+                toResourceFromEntity(publication);
         return new ResponseEntity<>(publicationResource, HttpStatus.CREATED);
     }
 
@@ -51,7 +59,8 @@ public class PublicationController {
         if (publicationId == null) {
             return ResponseEntity.badRequest().build();
         }
-        var updatePublicationResource = new UpdatePublicationResource(publicationId, resource.entrepreneurId(), resource.adventure(), resource.nameActivity(), resource.description(), resource.timeDuration(), resource.image(), resource.cantPeople(), resource.cost());
+        Long entrepreneurId = SecurityUtils.getCurrentUserId();
+        var updatePublicationResource = new UpdatePublicationResource(publicationId, entrepreneurId, resource.adventure(), resource.nameActivity(), resource.description(), resource.timeDuration(), resource.image(), resource.cantPeople(), resource.cost());
         var updatePublicationCommand = new UpdatePublicationCommandFromResourceAssembler().toCommandFromResource(updatePublicationResource);
         Optional<Publication> publicationOptional = publicationCommandService.handle(updatePublicationCommand);
         if (publicationOptional.isEmpty()) {
@@ -60,6 +69,7 @@ public class PublicationController {
         var publicationResource = PublicationResourceFromEntityAssembler.toResourceFromEntity(publicationOptional.get());
         return new ResponseEntity<>(publicationResource, HttpStatus.CREATED);
     }
+
 
     @DeleteMapping("/{publicationId}/delete-publication")
     public ResponseEntity<Void> deletePublication(@PathVariable Long publicationId) {
@@ -71,18 +81,18 @@ public class PublicationController {
     }
 
     @PostMapping("/{publicationId}/add-comment")
-    public ResponseEntity<PublicationResource> addCommentToPublication(@PathVariable Long publicationId, @RequestBody AddCommentToPublicationResource resource) {
+    public ResponseEntity<CommentResource> addCommentToPublication(@PathVariable Long publicationId, @RequestBody AddCommentToPublicationResource resource) {
         if (publicationId == null) {
             return ResponseEntity.badRequest().build();
         }
-        var addCommentToPublicationResource = new AddCommentToPublicationResource(publicationId, resource.content(), resource.rating());
+        var addCommentToPublicationResource = new AddCommentToPublicationResource(publicationId, resource.content(), resource.rating(), resource.adventureId());
         var addCommentToPublicationCommand = AddCommentCommandFromResourceAssembler.toCommandFromResource(addCommentToPublicationResource);
-        var publication = publicationCommandService.handle(addCommentToPublicationCommand);
-        var publicationResource = PublicationResourceFromEntityAssembler.toResourceFromEntity(publication);
-        if (publication == null) {
+        var comment = publicationCommandService.handle(addCommentToPublicationCommand);
+        if (comment == null) {
             return ResponseEntity.badRequest().build();
         }
-        return new ResponseEntity<>(publicationResource, HttpStatus.CREATED);
+        var commentResource = CommentResouceFromEntityAssembler.toResourceFromEntity(comment);
+        return new ResponseEntity<>(commentResource, HttpStatus.CREATED);
     }
 
     @GetMapping("/all-publications")

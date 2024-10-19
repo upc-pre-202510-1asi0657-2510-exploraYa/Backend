@@ -21,31 +21,25 @@ public class PublicationCommandServiceImpl  implements PublicationCommandService
     }
 
 
-    @Override
-    public Publication handle(CreatePublicationCommand command) {
-        if (publicationRepository.existsByAdventureNameActivity(command.nameActivity())) {
-            throw new IllegalArgumentException("Publication already exists");
-        }
-        var adventure = new Adventure(command.nameActivity(), command.description(), command.cantPeople(), command.timeDuration());
-        var publication = new Publication(command.cost(), new EntrepreneurId(command.userId()), adventure,
-                command.image(), command.timeDuration(),command.cantPeople());
-        publicationRepository.save(publication);
-        return publication;
-    }
+      @Override
+      public Publication handle(CreatePublicationCommand command) {
+            var adventure = new Adventure(  command.nameActivity(), command.description(), command.cantPeople(), command.timeDuration());
+            var publication = new Publication(new EntrepreneurId(command.entrepreneurId()), adventure, command.cost(),command.image());
+            publicationRepository.save(publication);
+            return publication;
+      }
+
 
     @Override
     public Optional<Publication> handle(UpdatePublicationCommand command) {
-       if (!publicationRepository.existsById(command.publicationId())) {
+        if (!publicationRepository.existsById(command.publicationId())) {
             throw new IllegalArgumentException("Publication does not exist");
         }
         var publication = publicationRepository.findById(command.publicationId()).get();
-        publication.updateCost(command.cost());
-        publication.updateEntrepreneurId(command.entrepreneurId());
-        var adventure = publication.getAdventure();
-        adventure.setNameActivity(command.adventure().getNameActivity());
-        adventure.setDescription(command.adventure().getDescription());
-        adventure.setCantPeople(command.adventure().getCantPeople());
-        adventure.setTimeDuration(command.adventure().getTimeDuration());
+        publication.setCost(command.cost());
+        publication.setEntrepreneurId(new EntrepreneurId(command.entrepreneurId()));
+        publication.setAdventure(new Adventure(command.nameActivity(), command.description(), command.timeDuration(), command.cantPeople()));
+        publication.setImage(command.image());
         publicationRepository.save(publication);
         return Optional.of(publication);
     }
@@ -55,20 +49,20 @@ public class PublicationCommandServiceImpl  implements PublicationCommandService
         if (!publicationRepository.existsById(command.publicationId())) {
             throw new IllegalArgumentException("Publication does not exist");
         }
+        publicationRepository.deleteById(command.publicationId());
     }
 
     @Override
-    public Publication handle(AddCommentToPublicationCommand command) {
-       if (!publicationRepository.existsById(command.publicationId())) {
+    public Comment handle(AddCommentToPublicationCommand command) {
+        if (!publicationRepository.existsById(command.publicationId())) {
             throw new IllegalArgumentException("Publication does not exist");
         }
         var publication = publicationRepository.findById(command.publicationId()).get();
-        var comment = publication.getComments();
-        comment.add(new Comment(publication, command.content(), command.rating()));
+        var comment = new Comment(publication, command.content(), command.rating());
+        publication.getComments().add(comment);
         publicationRepository.save(publication);
-        return publication;
+        return comment;
     }
-
     @Override
     public void handle(AssignEntrepreneurToPublicationCommand command) {
 

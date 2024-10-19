@@ -4,15 +4,16 @@ import com.upc.aventurape.platform.profiles.domain.model.commands.CreateProfileE
 import com.upc.aventurape.platform.profiles.interfaces.rest.resources.CreateProfileEntrepreneurResource;
 
 public class CreateProfileEntrepreneurCommandFromResourceAssembler {
-    public static CreateProfileEntrepreneurCommand toCommandFromResource (CreateProfileEntrepreneurResource resource) {
+    public static CreateProfileEntrepreneurCommand toCommandFromResource(CreateProfileEntrepreneurResource resource, Long userId) {
         return new CreateProfileEntrepreneurCommand(
-                resource.email(),
-                resource.street(),
-                resource.number(),
-                resource.city(),
-                resource.postalCode(),
-                resource.country(),
-                resource.name()
+                userId,
+                resource.emailAddress(),
+                resource.addressStreet(),
+                resource.addressNumber(),
+                resource.addressCity(),
+                resource.addressPostalCode(),
+                resource.addressCountry(),
+                resource.nameEntrepreneurship()
         );
     }
 }

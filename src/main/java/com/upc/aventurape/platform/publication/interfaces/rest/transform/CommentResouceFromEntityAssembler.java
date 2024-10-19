@@ -7,6 +7,7 @@ public class CommentResouceFromEntityAssembler {
     public static CommentResource toResourceFromEntity(Comment comment) {
         return new CommentResource(
                 comment.getId(),
+                comment.getAdventureId(),
                 comment.getContent(),
                 comment.getRating()
         );

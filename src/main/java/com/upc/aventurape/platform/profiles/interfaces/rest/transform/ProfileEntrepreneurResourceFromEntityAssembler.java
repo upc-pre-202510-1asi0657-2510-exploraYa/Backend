@@ -5,8 +5,10 @@ import com.upc.aventurape.platform.profiles.interfaces.rest.resources.ProfileEnt
 
 public class ProfileEntrepreneurResourceFromEntityAssembler {
     public static ProfileEntrepreneurResource toResourceFromEntity(ProfileEntrepreneur entity) {
+        Long userId = entity.getUserId() != null ? entity.getUserId().userId() : null;
         return new ProfileEntrepreneurResource(
                 entity.getId(),
+                userId,
                 entity.getName(),
                 entity.getEmailAddress(),
                 entity.getStreetAddress()

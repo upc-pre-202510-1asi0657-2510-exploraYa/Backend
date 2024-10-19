@@ -33,7 +33,7 @@ public class PublicationQueryServiceImpl implements PublicationQueryService {
 
     @Override
     public List<Publication> handle(GetPublicationByEntrepeneurIdQuery query) {
-        return publicationRepository.findByEntrepreneurId(query.entrepeneurId());
+        return publicationRepository.findByEntrepreneurId(query.entrepreneurId());
     }
 
     @Override

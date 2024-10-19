@@ -1,6 +1,5 @@
 package com.upc.aventurape.platform.iam.domain.model.aggregates;
 
-
 import com.upc.aventurape.platform.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -8,7 +7,10 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import com.upc.aventurape.platform.iam.domain.model.entities.Role;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -22,7 +24,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-public class User extends AuditableAbstractAggregateRoot<User> {
+public class User extends AuditableAbstractAggregateRoot<User> implements UserDetails {
 
   @NotBlank
   @Size(max = 50)
@@ -42,6 +44,7 @@ public class User extends AuditableAbstractAggregateRoot<User> {
   public User() {
     this.roles = new HashSet<>();
   }
+
   public User(String username, String password) {
     this.username = username;
     this.password = password;
@@ -72,5 +75,30 @@ public class User extends AuditableAbstractAggregateRoot<User> {
     var validatedRoleSet = Role.validateRoleSet(roles);
     this.roles.addAll(validatedRoleSet);
     return this;
+  }
+
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return this.roles;
+  }
+
+  @Override
+  public boolean isAccountNonExpired() {
+    return true;
+  }
+
+  @Override
+  public boolean isAccountNonLocked() {
+    return true;
+  }
+
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return true;
+  }
+
+  @Override
+  public boolean isEnabled() {
+    return true;
   }
 }
