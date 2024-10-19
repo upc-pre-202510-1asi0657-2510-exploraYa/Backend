@@ -1,5 +1,6 @@
 package com.upc.aventurape.platform.publication.domain.model.entities;
 
+import com.upc.aventurape.platform.iam.infrastructure.security.SecurityUtils;
 import com.upc.aventurape.platform.publication.domain.model.aggregates.Publication;
 import com.upc.aventurape.platform.publication.domain.model.valueobjects.CommentManager;
 import com.upc.aventurape.platform.publication.domain.model.valueobjects.ProfileId;
@@ -39,4 +40,7 @@ public class Comment {
         this.rating = rating;
     }
 
+    public Long AdventureId() {
+        return  SecurityUtils.getCurrentUserId();
+    }
 }

@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,7 +38,10 @@ public class PublicationController {
         this.publicationQueryService = publicationQueryService;
     }
 
+
+
     @PostMapping("/create-publication")
+    @PreAuthorize("!hasRole('ROLE_ADVENTUROUS')")
     public ResponseEntity<PublicationResource> createPublication(@RequestBody CreatePublicationResource resource) {
         Long entrepreneurId = SecurityUtils.getCurrentUserId();
         var createPublicationCommand = CreatePublicationCommandFromResourceAssembler.toCommandFromResource(resource, entrepreneurId);
@@ -76,18 +80,18 @@ public class PublicationController {
     }
 
     @PostMapping("/{publicationId}/add-comment")
-    public ResponseEntity<PublicationResource> addCommentToPublication(@PathVariable Long publicationId, @RequestBody AddCommentToPublicationResource resource) {
+    public ResponseEntity<CommentResource> addCommentToPublication(@PathVariable Long publicationId, @RequestBody AddCommentToPublicationResource resource) {
         if (publicationId == null) {
             return ResponseEntity.badRequest().build();
         }
         var addCommentToPublicationResource = new AddCommentToPublicationResource(publicationId, resource.content(), resource.rating());
         var addCommentToPublicationCommand = AddCommentCommandFromResourceAssembler.toCommandFromResource(addCommentToPublicationResource);
-        var publication = publicationCommandService.handle(addCommentToPublicationCommand);
-        var publicationResource = PublicationResourceFromEntityAssembler.toResourceFromEntity(publication);
-        if (publication == null) {
+        var comment = publicationCommandService.handle(addCommentToPublicationCommand);
+        if (comment == null) {
             return ResponseEntity.badRequest().build();
         }
-        return new ResponseEntity<>(publicationResource, HttpStatus.CREATED);
+        var commentResource = CommentResouceFromEntityAssembler.toResourceFromEntity(comment);
+        return new ResponseEntity<>(commentResource, HttpStatus.CREATED);
     }
 
     @GetMapping("/all-publications")

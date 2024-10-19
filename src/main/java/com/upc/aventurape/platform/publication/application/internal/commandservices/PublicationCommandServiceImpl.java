@@ -53,17 +53,16 @@ public class PublicationCommandServiceImpl  implements PublicationCommandService
     }
 
     @Override
-    public Publication handle(AddCommentToPublicationCommand command) {
-       if (!publicationRepository.existsById(command.publicationId())) {
+    public Comment handle(AddCommentToPublicationCommand command) {
+        if (!publicationRepository.existsById(command.publicationId())) {
             throw new IllegalArgumentException("Publication does not exist");
         }
         var publication = publicationRepository.findById(command.publicationId()).get();
-        var comment = publication.getComments();
-        comment.add(new Comment(publication, command.content(), command.rating()));
+        var comment = new Comment(publication, command.content(), command.rating());
+        publication.getComments().add(comment);
         publicationRepository.save(publication);
-        return publication;
+        return comment;
     }
-
     @Override
     public void handle(AssignEntrepreneurToPublicationCommand command) {
 
