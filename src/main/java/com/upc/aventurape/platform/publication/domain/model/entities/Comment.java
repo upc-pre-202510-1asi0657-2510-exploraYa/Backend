@@ -25,14 +25,12 @@ public class Comment {
 
     private Short rating;
 
-    @Embedded
-    private ProfileId profileid;
 
     public Comment(){
         this.publication = new Publication();
         this.content = "";
         this.rating = 0;
-        this.profileid = new ProfileId();
+
     }
     public Comment(Publication publication, String content, Short rating) {
         this.publication = publication;
