@@ -1,5 +1,7 @@
+// src/main/java/com/upc/aventurape/platform/publication/interfaces/rest/PublicationController.java
 package com.upc.aventurape.platform.publication.interfaces.rest;
 
+import com.upc.aventurape.platform.iam.infrastructure.security.SecurityUtils;
 import com.upc.aventurape.platform.publication.domain.model.aggregates.Publication;
 import com.upc.aventurape.platform.publication.domain.model.commands.DeletePublicationCommand;
 import com.upc.aventurape.platform.publication.domain.model.queries.*;
@@ -37,7 +39,8 @@ public class PublicationController {
 
     @PostMapping("/create-publication")
     public ResponseEntity<PublicationResource> createPublication(@RequestBody CreatePublicationResource resource) {
-        var createPublicationCommand = CreatePublicationCommandFromResourceAssembler.toCommandFromResource(resource);
+        Long entrepreneurId = SecurityUtils.getCurrentUserId();
+        var createPublicationCommand = CreatePublicationCommandFromResourceAssembler.toCommandFromResource(resource, entrepreneurId);
         var publication = publicationCommandService.handle(createPublicationCommand);
         if (publication == null) {
             return ResponseEntity.badRequest().build();
@@ -51,7 +54,8 @@ public class PublicationController {
         if (publicationId == null) {
             return ResponseEntity.badRequest().build();
         }
-        var updatePublicationResource = new UpdatePublicationResource(publicationId, resource.entrepreneurId(), resource.adventure(), resource.nameActivity(), resource.description(), resource.timeDuration(), resource.image(), resource.cantPeople(), resource.cost());
+        Long entrepreneurId = SecurityUtils.getCurrentUserId();
+        var updatePublicationResource = new UpdatePublicationResource(publicationId, entrepreneurId, resource.adventure(), resource.nameActivity(), resource.description(), resource.timeDuration(), resource.image(), resource.cantPeople(), resource.cost());
         var updatePublicationCommand = new UpdatePublicationCommandFromResourceAssembler().toCommandFromResource(updatePublicationResource);
         Optional<Publication> publicationOptional = publicationCommandService.handle(updatePublicationCommand);
         if (publicationOptional.isEmpty()) {
@@ -60,6 +64,7 @@ public class PublicationController {
         var publicationResource = PublicationResourceFromEntityAssembler.toResourceFromEntity(publicationOptional.get());
         return new ResponseEntity<>(publicationResource, HttpStatus.CREATED);
     }
+
 
     @DeleteMapping("/{publicationId}/delete-publication")
     public ResponseEntity<Void> deletePublication(@PathVariable Long publicationId) {

@@ -37,7 +37,7 @@ public class PublicationCommandServiceImpl  implements PublicationCommandService
         }
         var publication = publicationRepository.findById(command.publicationId()).get();
         publication.setCost(command.cost());
-        publication.setEntrepreneurId(new EntrepreneurId(command.entrepreneurId().entrepreneurId()));
+        publication.setEntrepreneurId(new EntrepreneurId(command.entrepreneurId()));
         publication.setAdventure(new Adventure(command.nameActivity(), command.description(), command.timeDuration(), command.cantPeople()));
         publication.setImage(command.image());
         publicationRepository.save(publication);

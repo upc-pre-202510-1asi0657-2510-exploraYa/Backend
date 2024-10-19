@@ -2,7 +2,7 @@ package com.upc.aventurape.platform.publication.domain.model.entities;
 
 import com.upc.aventurape.platform.publication.domain.model.aggregates.Publication;
 import com.upc.aventurape.platform.publication.domain.model.valueobjects.CommentManager;
-import com.upc.aventurape.platform.publication.domain.model.valueobjects.UserId;
+import com.upc.aventurape.platform.publication.domain.model.valueobjects.ProfileId;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -25,13 +25,13 @@ public class Comment {
     private Short rating;
 
     @Embedded
-    private UserId userId;
+    private ProfileId profileid;
 
     public Comment(){
         this.publication = new Publication();
         this.content = "";
         this.rating = 0;
-        this.userId = new UserId();
+        this.profileid = new ProfileId();
     }
     public Comment(Publication publication, String content, Short rating) {
         this.publication = publication;
