@@ -6,8 +6,8 @@ import com.upc.aventurape.platform.publication.interfaces.rest.resources.Comment
 public class CommentResouceFromEntityAssembler {
     public static CommentResource toResourceFromEntity(Comment comment) {
         return new CommentResource(
-                comment.AdventureId(),
                 comment.getId(),
+                comment.getAdventureId(),
                 comment.getContent(),
                 comment.getRating()
         );

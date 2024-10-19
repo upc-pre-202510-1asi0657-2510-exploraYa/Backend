@@ -25,20 +25,23 @@ public class Comment {
 
     private Short rating;
 
+    @Embedded
+    private ProfileId profileid;
+
+    private Long adventureId;
 
     public Comment(){
         this.publication = new Publication();
         this.content = "";
         this.rating = 0;
-
+        this.profileid = new ProfileId();
+        this.adventureId = SecurityUtils.getCurrentUserId();
     }
+
     public Comment(Publication publication, String content, Short rating) {
         this.publication = publication;
         this.content = content;
         this.rating = rating;
-    }
-
-    public Long AdventureId() {
-        return  SecurityUtils.getCurrentUserId();
+        this.adventureId = SecurityUtils.getCurrentUserId();
     }
 }

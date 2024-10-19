@@ -84,7 +84,7 @@ public class PublicationController {
         if (publicationId == null) {
             return ResponseEntity.badRequest().build();
         }
-        var addCommentToPublicationResource = new AddCommentToPublicationResource(publicationId, resource.content(), resource.rating());
+        var addCommentToPublicationResource = new AddCommentToPublicationResource(publicationId, resource.content(), resource.rating(), resource.adventureId());
         var addCommentToPublicationCommand = AddCommentCommandFromResourceAssembler.toCommandFromResource(addCommentToPublicationResource);
         var comment = publicationCommandService.handle(addCommentToPublicationCommand);
         if (comment == null) {
