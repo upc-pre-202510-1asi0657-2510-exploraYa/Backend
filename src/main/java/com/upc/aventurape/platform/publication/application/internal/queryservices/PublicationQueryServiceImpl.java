@@ -3,6 +3,7 @@ package com.upc.aventurape.platform.publication.application.internal.queryservic
 import com.upc.aventurape.platform.publication.domain.model.aggregates.Publication;
 import com.upc.aventurape.platform.publication.domain.model.entities.Adventure;
 import com.upc.aventurape.platform.publication.domain.model.entities.Comment;
+import com.upc.aventurape.platform.publication.domain.model.entities.Favorite;
 import com.upc.aventurape.platform.publication.domain.model.queries.*;
 import com.upc.aventurape.platform.publication.domain.services.PublicationQueryService;
 import com.upc.aventurape.platform.publication.infrastructure.persistence.jpa.repositories.PublicationRepository;

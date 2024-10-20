@@ -3,6 +3,7 @@ package com.upc.aventurape.platform.publication.domain.services;
 import com.upc.aventurape.platform.publication.domain.model.aggregates.Publication;
 import com.upc.aventurape.platform.publication.domain.model.entities.Adventure;
 import com.upc.aventurape.platform.publication.domain.model.entities.Comment;
+import com.upc.aventurape.platform.publication.domain.model.entities.Favorite;
 import com.upc.aventurape.platform.publication.domain.model.queries.*;
 
 import java.util.List;

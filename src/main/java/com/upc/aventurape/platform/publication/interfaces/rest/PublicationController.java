@@ -28,7 +28,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping(value = "/api/v1/publication", produces = MediaType.APPLICATION_JSON_VALUE)
-@Tag(name = "AdventuratePe", description = "Publication of AdventuratePe Management Endpoints")
+@Tag(name = "Publications")
 public class PublicationController {
     private final PublicationCommandService publicationCommandService;
     private final PublicationQueryService publicationQueryService;

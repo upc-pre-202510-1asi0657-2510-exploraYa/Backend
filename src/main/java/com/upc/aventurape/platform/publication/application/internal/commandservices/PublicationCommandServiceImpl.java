@@ -4,7 +4,9 @@ import com.upc.aventurape.platform.publication.domain.model.aggregates.Publicati
 import com.upc.aventurape.platform.publication.domain.model.commands.*;
 import com.upc.aventurape.platform.publication.domain.model.entities.Adventure;
 import com.upc.aventurape.platform.publication.domain.model.entities.Comment;
+import com.upc.aventurape.platform.publication.domain.model.entities.Favorite;
 import com.upc.aventurape.platform.publication.domain.model.valueobjects.EntrepreneurId;
+import com.upc.aventurape.platform.publication.domain.model.valueobjects.ProfileId;
 import com.upc.aventurape.platform.publication.domain.services.PublicationCommandService;
 import com.upc.aventurape.platform.publication.infrastructure.persistence.jpa.repositories.PublicationRepository;
 import org.springframework.stereotype.Service;
