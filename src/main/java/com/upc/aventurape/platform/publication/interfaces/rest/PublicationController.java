@@ -60,8 +60,7 @@ public class PublicationController {
             return ResponseEntity.badRequest().build();
         }
         Long entrepreneurId = SecurityUtils.getCurrentUserId();
-        var updatePublicationResource = new UpdatePublicationResource(publicationId, entrepreneurId, resource.adventure(), resource.nameActivity(), resource.description(), resource.timeDuration(), resource.image(), resource.cantPeople(), resource.cost());
-        var updatePublicationCommand = new UpdatePublicationCommandFromResourceAssembler().toCommandFromResource(updatePublicationResource);
+        var updatePublicationCommand = UpdatePublicationCommandFromResourceAssembler.toCommandFromResource(publicationId, entrepreneurId, resource);
         Optional<Publication> publicationOptional = publicationCommandService.handle(updatePublicationCommand);
         if (publicationOptional.isEmpty()) {
             return ResponseEntity.badRequest().build();
