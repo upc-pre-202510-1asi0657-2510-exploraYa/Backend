@@ -38,13 +38,10 @@ public class Publication extends AuditableAbstractAggregateRoot<Publication> {
     @Embedded
     private CommentManager commentManager;
 
-
     @Column(nullable = false)
     @NotNull
     @Size(max = 1000)
     private String image;
-
-
 
     @Column(nullable = false)
     @NotNull
@@ -76,10 +73,9 @@ public class Publication extends AuditableAbstractAggregateRoot<Publication> {
         this.entrepreneurId = entrepreneurId;
     }
 
-
     public void calculateRating() {
         double calculatedRating = commentManager.calculateRating(comments);
-        this.rating =calculatedRating;
+        this.rating = calculatedRating;
     }
 
     public void addComment(Comment comment) {
