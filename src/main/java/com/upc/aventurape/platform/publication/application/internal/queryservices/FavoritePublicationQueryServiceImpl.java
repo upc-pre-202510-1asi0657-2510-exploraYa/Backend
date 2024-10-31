@@ -2,6 +2,7 @@ package com.upc.aventurape.platform.publication.application.internal.queryservic
 
 import com.upc.aventurape.platform.publication.domain.model.entities.Favorite;
 import com.upc.aventurape.platform.publication.domain.model.queries.GetAllFavoritePublicationsQuery;
+import com.upc.aventurape.platform.publication.domain.model.queries.GetFavoritePublicationByProfileIdQuery;
 import com.upc.aventurape.platform.publication.domain.services.FavoritePublicationQueryService;
 import com.upc.aventurape.platform.publication.infrastructure.persistence.jpa.repositories.FavoritePublicationRepository;
 import org.springframework.stereotype.Service;
@@ -20,5 +21,10 @@ public class FavoritePublicationQueryServiceImpl implements FavoritePublicationQ
     @Override
     public List<Favorite> handle(GetAllFavoritePublicationsQuery query) {
         return favoriteRepository.findAll();
+    }
+
+    @Override
+    public List<Favorite> handle(GetFavoritePublicationByProfileIdQuery query) {
+        return favoriteRepository.findByProfileId(query.profileId());
     }
 }

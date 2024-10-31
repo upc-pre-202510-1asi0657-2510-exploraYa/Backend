@@ -1,6 +1,7 @@
 // src/main/java/com/upc/aventurape/platform/publication/application/internal/outboundservices/acl/ExternalProfileService.java
 package com.upc.aventurape.platform.publication.application.internal.outboundservices.acl;
 
+import com.upc.aventurape.platform.profiles.domain.model.queries.GetProfileAdventurerByIdQuery;
 import org.springframework.stereotype.Service;
 import com.upc.aventurape.platform.publication.domain.model.valueobjects.ProfileId;
 import com.upc.aventurape.platform.profiles.domain.model.commands.CreateProfileAdventurerCommand;
@@ -45,33 +46,5 @@ public class ExternalProfileService {
       throw new IllegalArgumentException("Invalid profile type: " + profileType);
     }
   }
-/*
-  public Optional<ProfileId> createAdventurerProfile(String firstName, String lastName, String email, String street, String number, String city, String postalCode, String country, String gender) {
-
-    CreateProfileAdventurerCommand command = new CreateProfileAdventurerCommand(firstName,  lastName,  email,  street,  number,  city,  postalCode,  country,  gender);
-    var profile = profileAdventureCommandService.handle(command);
-    return profile.map(p -> new ProfileId(p.getId()));
-  }
-
-  public Optional<ProfileId> createEntrepreneurProfile(String email, String street, String number, String city, String postalCode, String country, String name) {
-
-    CreateProfileEntrepreneurCommand command = new CreateProfileEntrepreneurCommand(email,  street,  number,  city,  postalCode,  country,  name);
-    var profile = profileEntrepreneurCommandService.handle(command);
-    return profile.map(p -> new ProfileId(p.getId()));
-  }
-
-  /*
-  public Optional<ProfileId> createProfile(String firstName, String lastName, String email,
-      String street, String number, String city, String state, String zipCode, String country, String gender, String profileType) {
-
-    if ("adventurer".equalsIgnoreCase(profileType)) {
-      return createAdventurerProfile(firstName,  lastName,  email,  street,  number,  city,  postalCode,  country,  gender);
-    } else if ("entrepreneur".equalsIgnoreCase(profileType)) {
-      return createEntrepreneurProfile(email,  street,  number,  city,  postalCode,  country,  name);
-    } else {
-      throw new IllegalArgumentException("Invalid profile type: " + profileType);
-    }
-  }
-  */
 
 }
