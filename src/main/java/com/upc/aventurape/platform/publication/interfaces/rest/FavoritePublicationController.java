@@ -3,6 +3,7 @@ package com.upc.aventurape.platform.publication.interfaces.rest;
 
 import com.upc.aventurape.platform.iam.infrastructure.security.SecurityUtils;
 import com.upc.aventurape.platform.publication.application.internal.outboundservices.acl.ExternalProfileService;
+import com.upc.aventurape.platform.publication.domain.model.commands.DeleteFavoriteCommand;
 import com.upc.aventurape.platform.publication.domain.model.queries.GetAllFavoritePublicationsQuery;
 import com.upc.aventurape.platform.publication.domain.model.queries.GetFavoritePublicationByProfileIdQuery;
 import com.upc.aventurape.platform.publication.domain.model.valueobjects.ProfileId;
@@ -70,6 +71,12 @@ public class FavoritePublicationController {
         var favoritePublication = favoriteCommandService.handle(createFavoritePublicationCommand);
         var favoriteResource = FavoritePublicationResourceFromEntityAssembler.toResourceFromEntity(favoritePublication);
         return new ResponseEntity<>(favoriteResource, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/delete-favorite-publication/{id}")
+    public ResponseEntity<Void> deleteFavoritePublication(@PathVariable Long id) {
+        favoriteCommandService.handle(new DeleteFavoriteCommand(id));
+        return ResponseEntity.noContent().build();
     }
 
 }
