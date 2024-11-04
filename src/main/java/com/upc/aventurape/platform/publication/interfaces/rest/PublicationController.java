@@ -149,4 +149,19 @@ public class PublicationController {
                 .collect(Collectors.toList());
         return new ResponseEntity<>(commentResources, HttpStatus.OK);
     }
+
+    // New method to get favorite publications by entrepreneur id rating
+    @GetMapping("/publications/order-by-rating")
+    public ResponseEntity<List<PublicationResource>> getFavoritePublicationsByProfileIdOrderedByRating(@RequestParam Long entrepreneurId) {
+        if (entrepreneurId == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        GetFavoritePublicationsByProfileIdOrderedByRatingQuery query = new GetFavoritePublicationsByProfileIdOrderedByRatingQuery(entrepreneurId);
+        List<Publication> publications = publicationQueryService.handle(query);
+        List<PublicationResource> publicationResources = publications.stream()
+                .map(PublicationResourceFromEntityAssembler::toResourceFromEntity)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(publicationResources, HttpStatus.OK);
+    }
+
 }
