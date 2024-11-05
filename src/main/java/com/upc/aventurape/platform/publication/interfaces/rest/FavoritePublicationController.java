@@ -2,6 +2,7 @@
 package com.upc.aventurape.platform.publication.interfaces.rest;
 
 import com.upc.aventurape.platform.iam.infrastructure.security.SecurityUtils;
+import com.upc.aventurape.platform.publication.application.internal.outboundservices.acl.ExternalProfileService;
 import com.upc.aventurape.platform.publication.domain.model.commands.DeleteFavoriteCommand;
 import com.upc.aventurape.platform.publication.domain.model.queries.GetAllFavoritePublicationsQuery;
 import com.upc.aventurape.platform.publication.domain.model.queries.GetFavoritePublicationByProfileIdQuery;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// src/main/java/com/upc/aventurape/platform/publication/interfaces/rest/FavoritePublicationController.java
 
 @RestController
 @RequestMapping(value= "/api/v1/favorite-publications", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -36,7 +38,7 @@ public class FavoritePublicationController {
         this.favoriteQueryService = favoriteQueryService;
     }
 
-    @GetMapping("/all-favorites-publications")
+    @GetMapping("/getAllFavoritesPublications")
     public ResponseEntity<List<FavoriteResource>> getAllFavoritePublications() {
         var getAllFavoritePublicationsQuery = new GetAllFavoritePublicationsQuery();
         var favoritePublications = favoriteQueryService.handle(getAllFavoritePublicationsQuery);
@@ -46,12 +48,12 @@ public class FavoritePublicationController {
         return new ResponseEntity<>(publicationResources, HttpStatus.OK);
     }
 
-    @GetMapping("/favorite-publication-by-profile-id/{profileId}")
+    @GetMapping("/getFavoritePublicationByProfileId/{profileId}")
     public ResponseEntity<List<FavoriteResource>> getFavoritePublicationByProfileId(@PathVariable Long profileId) {
         if (profileId == null) {
             return ResponseEntity.badRequest().build();
         }
-        var profileIdLong = new ProfileId(profileId);
+        var profileIdLong=new ProfileId(profileId);
         var getFavoritePublicationByProfileIdQuery = new GetFavoritePublicationByProfileIdQuery(profileIdLong);
         var favoritePublications = favoriteQueryService.handle(getFavoritePublicationByProfileIdQuery);
         var publicationResources = favoritePublications.stream()
@@ -60,7 +62,6 @@ public class FavoritePublicationController {
         return new ResponseEntity<>(publicationResources, HttpStatus.OK);
     }
 
-    @GetMapping("/favorite-publications-by-user-ordered-by-comments/{userId}")
 
 
     @PostMapping("/create-favorite-publication")
@@ -77,4 +78,5 @@ public class FavoritePublicationController {
         favoriteCommandService.handle(new DeleteFavoriteCommand(id));
         return ResponseEntity.noContent().build();
     }
+
 }
