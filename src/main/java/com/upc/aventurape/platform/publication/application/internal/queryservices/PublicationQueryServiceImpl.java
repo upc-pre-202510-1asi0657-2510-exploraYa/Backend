@@ -60,14 +60,7 @@ public class PublicationQueryServiceImpl implements PublicationQueryService {
     @Override
     public List<Publication> handle(GetFavoritePublicationsByProfileIdOrderedByRatingQuery query) {
         return publicationRepository.findByEntrepreneurId(query.entrepreneurId()).stream()
-                .sorted(Comparator.comparingDouble(this::calculateAverageRating).reversed())
+                .sorted(Comparator.comparingDouble(Publication::getAverageRating).reversed())
                 .collect(Collectors.toList());
-    }
-
-    private double calculateAverageRating(Publication publication) {
-        return publication.getComments().stream()
-                .mapToInt(Comment::getRating)
-                .average()
-                .orElse(0.0);
     }
 }
