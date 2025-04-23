@@ -41,6 +41,10 @@ public class User extends AuditableAbstractAggregateRoot<User> implements UserDe
       inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles;
 
+
+  @Column(length = 1000000000)
+  private String proofingEntrepreneure; // Added attribute
+
   public User() {
     this.roles = new HashSet<>();
   }

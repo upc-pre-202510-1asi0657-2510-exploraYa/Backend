@@ -13,19 +13,19 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenApiConfiguration {
   @Bean
-  public OpenAPI eventWearPlatformOpenApi() {
+  public OpenAPI AdventuraPePlatformOpenApi() {
     // General configuration
     var openApi = new OpenAPI();
     openApi
         .info(new Info()
-            .title("AdventuratePe Platform API")
-            .description("AdventuratePe Platform application REST API documentation.")
+            .title("AdventuraPe Platform API")
+            .description("AdventuraPe Platform application REST API documentation.")
             .version("v1.0.0")
             .license(new License().name("Apache 2.0")
                 .url("https://springdoc.org")))
         .externalDocs(new ExternalDocumentation()
-            .description("AdventuratePe Platform wiki Documentation")
-            .url("https/event-wear-platform.com/docs"));
+            .description("AdventuraPe Platform wiki Documentation")
+            .url("https/adventura-pe-platform.com/docs"));
 
     // Add security scheme
     final String securitySchemeName = "bearerAuth";

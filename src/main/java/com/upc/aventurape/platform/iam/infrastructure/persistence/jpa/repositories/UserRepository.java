@@ -1,6 +1,8 @@
 package com.upc.aventurape.platform.iam.infrastructure.persistence.jpa.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import com.upc.aventurape.platform.iam.domain.model.aggregates.User;
 
@@ -11,8 +13,8 @@ import java.util.Optional;
  * It extends the JpaRepository interface.
  */
 @Repository
-public interface UserRepository extends JpaRepository<User, Long>
-{
+public interface UserRepository extends JpaRepository<User, Long> {
+
   /**
    * This method is responsible for finding the user by username.
    * @param username The username.
@@ -26,4 +28,14 @@ public interface UserRepository extends JpaRepository<User, Long>
    * @return True if the user exists, false otherwise.
    */
   boolean existsByUsername(String username);
+
+  /**
+   * This method checks if a user has the ROLE_ENTREPRENEUR role based on role_id = 3.
+   * @param userId The user ID.
+   * @return True if the user has the entrepreneur role, false otherwise.
+   */
+  @Query("SELECT CASE WHEN COUNT(ur) > 0 THEN TRUE ELSE FALSE END " +
+          "FROM User u JOIN u.roles ur " +
+          "WHERE u.id = :userId AND ur.id = 3")
+  boolean hasEntrepreneurRole(@Param("userId") Long userId);
 }

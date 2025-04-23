@@ -8,10 +8,10 @@
 		<version>3.2.6</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.event.wear.platform</groupId>
-	<artifactId>event-wear-platform-transactions</artifactId>
+	<groupId>com.adventura.pe.platform</groupId>
+	<artifactId>adventura-pe-platform-transactions</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>event-wear-platform</name>
+	<name>adventura-pe-platform</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>21</java.version>

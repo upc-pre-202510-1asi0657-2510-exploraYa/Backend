@@ -1,12 +1,13 @@
 package com.upc.aventurape.platform.iam.interfaces.rest;
 
+import com.upc.aventurape.platform.iam.domain.services.UserCommandService;
+import com.upc.aventurape.platform.iam.interfaces.rest.resources.UpdateProofingEntrepreneureResource;
+import com.upc.aventurape.platform.iam.interfaces.rest.transform.UpdateProofingEntrepreneureCommandFromResourceAssembler;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.upc.aventurape.platform.iam.domain.model.queries.GetAllUsersQuery;
 import com.upc.aventurape.platform.iam.domain.model.queries.GetUserByIdQuery;
 import com.upc.aventurape.platform.iam.domain.services.UserQueryService;
@@ -27,8 +28,10 @@ import java.util.List;
 public class UsersController {
 
   private final UserQueryService userQueryService;
-
-  public UsersController(UserQueryService userQueryService) {
+  private final UserCommandService userCommandService;
+  public UsersController(UserQueryService userQueryService, UserCommandService userCommandService)
+  {
+    this.userCommandService = userCommandService;
     this.userQueryService = userQueryService;
   }
 
@@ -66,4 +69,13 @@ public class UsersController {
     var userResource = UserResourceFromEntityAssembler.toResourceFromEntity(user.get());
     return ResponseEntity.ok(userResource);
   }
+
+    @PostMapping("/{userId}/update-proofing")
+    public ResponseEntity<String> updateProofingEntrepreneure(
+            @PathVariable Long userId,
+            @RequestBody @Valid UpdateProofingEntrepreneureResource resource) {
+      var command = UpdateProofingEntrepreneureCommandFromResourceAssembler.toCommandFromResource(userId, resource);
+      userCommandService.updateProofingEntrepreneure(command);
+      return ResponseEntity.ok("ProofingEntrepreneure updated successfully.");
+    }
 }
