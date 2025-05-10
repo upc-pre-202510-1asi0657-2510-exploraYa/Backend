@@ -1,0 +1,17 @@
+package com.upc.aventurape.platform;
+
+import com.upc.aventurape.platform.iam.domain.model.aggregates.User;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class UserBuilderTest {
+    @Test
+    void builderConstruyeUsuarioCorrectamente() {
+        User user = new UserBuilder()
+                .setUsername("usuario")
+                .setPassword("password")
+                .build();
+        assertEquals("usuario", user.getUsername());
+        assertEquals("password", user.getPassword());
+    }
+} 
