@@ -34,8 +34,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
    * @param userId The user ID.
    * @return True if the user has the entrepreneur role, false otherwise.
    */
-  @Query("SELECT CASE WHEN COUNT(ur) > 0 THEN TRUE ELSE FALSE END " +
-          "FROM User u JOIN u.roles ur " +
-          "WHERE u.id = :userId AND ur.id = 3")
-  boolean hasEntrepreneurRole(@Param("userId") Long userId);
+
 }
