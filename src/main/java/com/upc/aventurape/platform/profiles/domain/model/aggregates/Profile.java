@@ -9,6 +9,7 @@ import jakarta.persistence.*;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Profile extends AuditableAbstractAggregateRoot<Profile> {
 
+    // This class represents a profile in the system, which includes an email address and a street address.
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "address", column = @Column(name = "email_address"))
@@ -75,4 +76,5 @@ public class Profile extends AuditableAbstractAggregateRoot<Profile> {
     public Long getId() {
         return id;
     }
+
 }
