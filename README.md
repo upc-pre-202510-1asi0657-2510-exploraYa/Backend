@@ -72,6 +72,6 @@ Algunos de los endpoints disponibles:
 ### Equipo
 
 * Jair Castillo (Desarrollador principal Backend)
-* Jimena Cama
+* Jimena Cama.
 * Paolo Guillen
 * Barbara Quezada
